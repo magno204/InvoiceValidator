@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/InvoiceRegistry.App/InvoiceRegistry.App.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/InvoiceRegistry.Tests/InvoiceRegistry.Tests.csproj" />
+  </Folder>
+</Solution>
