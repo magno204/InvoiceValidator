@@ -12,7 +12,7 @@ public static class InvoiceValidator
         if (string.IsNullOrWhiteSpace(f.Cliente))
             return (false, "El cliente es obligatorio.");
 
-        if (f.MontoTotal < 0)
+        if (f.MontoTotal <= 0)
             return (false, "El monto total no puede ser negativo.");
 
         return (true, null);
