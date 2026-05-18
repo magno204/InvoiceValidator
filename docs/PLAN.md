@@ -8,33 +8,37 @@ Este plan está dividido en **fases independientes y verificables**. Al terminar
 
 ## Resumen de fases
 
-| Fase | Nombre | Resultado esperado |
-|------|--------|--------------------|
-| 0 | Preparación del entorno | .NET 10 instalado, Git/GitHub listos |
-| 1 | Solución y esqueleto del proyecto | `dotnet build` verde sin UI todavía |
-| 2 | Tema oscuro y ventana principal | App abre con Fluent Dark vacío |
-| 3 | Modelo + Validador (con bug) | Clases `Invoice` e `InvoiceValidator` |
-| 4 | ViewModel + binding del formulario | Formulario funcional, agrega a `DataGrid` |
-| 5 | Proyecto de tests (sin el test del bug) | `dotnet test` verde con tests felices |
-| 6 | Verificación manual del bug | Bug reproducido en pantalla — **listo para grabar** |
-| 7 | Repo en GitHub e Issue del bug | Repo público, Issue #1 creado |
-| 8 | Branch + fix + test del bug | Rama `fix/issue-1-monto-cero` con cambios |
-| 9 | Commit, PR y code review | PR mergeado, Issue cerrado automáticamente |
-| 10 (opcional) | CI con GitHub Actions | Check verde en el PR |
+
+| Fase          | Nombre                                  | Resultado esperado                                  |
+| ------------- | --------------------------------------- | --------------------------------------------------- |
+| 0             | Preparación del entorno                 | .NET 10 instalado, Git/GitHub listos                |
+| 1             | Solución y esqueleto del proyecto       | `dotnet build` verde sin UI todavía                 |
+| 2             | Tema oscuro y ventana principal         | App abre con Fluent Dark vacío                      |
+| 3             | Modelo + Validador (con bug)            | Clases `Invoice` e `InvoiceValidator`               |
+| 4             | ViewModel + binding del formulario      | Formulario funcional, agrega a `DataGrid`           |
+| 5             | Proyecto de tests (sin el test del bug) | `dotnet test` verde con tests felices               |
+| 6             | Verificación manual del bug             | Bug reproducido en pantalla — **listo para grabar** |
+| 7             | Repo en GitHub e Issue del bug          | Repo público, Issue #1 creado                       |
+| 8             | Branch + fix + test del bug             | Rama `fix/issue-1-monto-cero` con cambios           |
+| 9             | Commit, PR y code review                | PR mergeado, Issue cerrado automáticamente          |
+| 10 (opcional) | CI con GitHub Actions                   | Check verde en el PR                                |
+
 
 ---
 
 ## Stack técnico (referencia transversal)
 
-| Item | Elección |
-|---|---|
-| Framework | .NET 10 (WPF) |
-| Lenguaje | C# 13 |
-| UI Theme | **Fluent Dark** (`ThemeMode="Dark"`) |
-| Patrón | MVVM ligero (sin librerías externas) |
+
+| Item         | Elección                                     |
+| ------------ | -------------------------------------------- |
+| Framework    | .NET 10 (WPF)                                |
+| Lenguaje     | C# 13                                        |
+| UI Theme     | **Fluent Dark** (`ThemeMode="Dark"`)         |
+| Patrón       | MVVM ligero (sin librerías externas)         |
 | Persistencia | En memoria (`ObservableCollection<Invoice>`) |
-| Testing | xUnit |
-| Repo | GitHub |
+| Testing      | xUnit                                        |
+| Repo         | GitHub                                       |
+
 
 ## Estructura final del repositorio
 
@@ -64,19 +68,20 @@ InvoiceRegistry/
 ### Pasos
 
 1. Verificar .NET 10:
-   ```powershell
+  ```powershell
    dotnet --version   # debe mostrar 10.x
-   ```
+  ```
 2. Verificar Git:
-   ```powershell
+  ```powershell
    git --version
    git config --global user.name "<Tu Nombre>"
    git config --global user.email "<tu@email.com>"
-   ```
+  ```
 3. Tener cuenta en GitHub y configurada la autenticación (`gh auth login` o SSH key).
 4. IDE: Visual Studio 2022/2026 con workload *.NET Desktop Development*, o VS Code + extensión C# Dev Kit.
 
 ### Criterio de "hecho"
+
 - `dotnet --version` ≥ 10.0.
 - `git config --global --get user.email` retorna tu correo.
 - Puedes hacer `gh repo list` (o login en github.com).
@@ -93,7 +98,7 @@ InvoiceRegistry/
 # En la raíz del repo
 dotnet new sln -n InvoiceRegistry
 
-dotnet new wpf   -n InvoiceRegistry.App   -o src/InvoiceRegistry.App   -f net10.0
+dotnet new wpf   -n InvoiceRegistry.App   -o src/InvoiceRegistry.App   -f net10.0-windows
 dotnet new xunit -n InvoiceRegistry.Tests -o tests/InvoiceRegistry.Tests -f net10.0
 
 dotnet sln add src/InvoiceRegistry.App/InvoiceRegistry.App.csproj
@@ -103,11 +108,10 @@ dotnet add tests/InvoiceRegistry.Tests/InvoiceRegistry.Tests.csproj `
            reference src/InvoiceRegistry.App/InvoiceRegistry.App.csproj
 ```
 
-> **Nota:** la plantilla `dotnet new wpf` exige `-f net10.0`, pero el `.csproj` resultante queda con `<TargetFramework>net10.0-windows</TargetFramework>`. Para que el proyecto de tests pueda referenciar al de WPF, editar `tests/InvoiceRegistry.Tests/InvoiceRegistry.Tests.csproj` y cambiar `<TargetFramework>net10.0</TargetFramework>` por `<TargetFramework>net10.0-windows</TargetFramework>` **antes** de agregar la referencia.
-
 Crea un `.gitignore` para Visual Studio (`dotnet new gitignore`).
 
 ### Criterio de "hecho"
+
 - `dotnet build` desde la raíz: **Build succeeded, 0 errors**.
 - La solución abre en el IDE mostrando los dos proyectos.
 
@@ -120,7 +124,7 @@ Crea un `.gitignore` para Visual Studio (`dotnet new gitignore`).
 ### Pasos
 
 1. `src/InvoiceRegistry.App/App.xaml`:
-   ```xml
+  ```xml
    <Application x:Class="InvoiceRegistry.App.App"
                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -130,10 +134,9 @@ Crea un `.gitignore` para Visual Studio (`dotnet new gitignore`).
            <ResourceDictionary Source="pack://application:,,,/PresentationFramework.Fluent;component/Themes/Fluent.Dark.xaml" />
        </Application.Resources>
    </Application>
-   ```
-
+  ```
 2. `src/InvoiceRegistry.App/MainWindow.xaml` (placeholder):
-   ```xml
+  ```xml
    <Window x:Class="InvoiceRegistry.App.MainWindow"
            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -144,11 +147,11 @@ Crea un `.gitignore` para Visual Studio (`dotnet new gitignore`).
                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
        </Grid>
    </Window>
-   ```
-
+  ```
 3. `dotnet run --project src/InvoiceRegistry.App`.
 
 ### Criterio de "hecho"
+
 - Se abre la ventana con fondo oscuro y el texto centrado.
 
 ---
@@ -160,7 +163,7 @@ Crea un `.gitignore` para Visual Studio (`dotnet new gitignore`).
 ### Pasos
 
 1. `src/InvoiceRegistry.App/Models/Invoice.cs`:
-   ```csharp
+  ```csharp
    namespace InvoiceRegistry.App.Models;
 
    public class Invoice
@@ -170,10 +173,9 @@ Crea un `.gitignore` para Visual Studio (`dotnet new gitignore`).
        public DateTime Fecha     { get; set; } = DateTime.Today;
        public decimal MontoTotal { get; set; }
    }
-   ```
-
+  ```
 2. `src/InvoiceRegistry.App/Services/InvoiceValidator.cs` — **AQUÍ VIVE EL BUG**:
-   ```csharp
+  ```csharp
    using InvoiceRegistry.App.Models;
 
    namespace InvoiceRegistry.App.Services;
@@ -194,9 +196,10 @@ Crea un `.gitignore` para Visual Studio (`dotnet new gitignore`).
            return (true, null);
        }
    }
-   ```
+  ```
 
 ### Criterio de "hecho"
+
 - `dotnet build` verde.
 - No hay UI aún ligada, solo clases.
 
@@ -211,9 +214,9 @@ Crea un `.gitignore` para Visual Studio (`dotnet new gitignore`).
 1. `ViewModels/ViewModelBase.cs` con `INotifyPropertyChanged`.
 2. `ViewModels/RelayCommand.cs` (implementación mínima de `ICommand`).
 3. `ViewModels/MainViewModel.cs`:
-   - Propiedades: `Numero`, `Cliente`, `Fecha`, `MontoTotal` (string o decimal), `MensajeError`.
-   - `ObservableCollection<Invoice> Facturas`.
-   - `GuardarCommand` → llama a `InvoiceValidator.Validar`; si OK agrega a la lista y limpia el formulario; si no, asigna `MensajeError`.
+  - Propiedades: `Numero`, `Cliente`, `Fecha`, `MontoTotal` (string o decimal), `MensajeError`.
+  - `ObservableCollection<Invoice> Facturas`.
+  - `GuardarCommand` → llama a `InvoiceValidator.Validar`; si OK agrega a la lista y limpia el formulario; si no, asigna `MensajeError`.
 4. `MainWindow.xaml`: formulario izquierdo + `DataGrid` derecho (ver layout en sección de UI más abajo).
 5. En `MainWindow.xaml.cs`: `DataContext = new MainViewModel();`.
 
@@ -256,6 +259,7 @@ Crea un `.gitignore` para Visual Studio (`dotnet new gitignore`).
 ```
 
 ### Criterio de "hecho"
+
 - Lanzo la app, lleno los 4 campos con monto `100`, clic en *Guardar* → aparece la factura en la grilla.
 - Si dejo el cliente vacío, aparece el mensaje de error en rojo.
 
@@ -311,6 +315,7 @@ public class InvoiceValidatorTests
 ```
 
 ### Criterio de "hecho"
+
 - `dotnet test` → **3/3 passed**.
 
 ---
@@ -320,20 +325,24 @@ public class InvoiceValidatorTests
 **Meta:** confirmar visualmente que el bug existe. Este es el **estado inicial que vamos a grabar**.
 
 ### Pasos
+
 1. `dotnet run --project src/InvoiceRegistry.App`.
 2. Llenar Número, Cliente, Fecha; dejar **Monto Total = 0**.
 3. Clic en *Guardar*. La factura aparece en la grilla con `$0.00`.
 
 ### Caracterización del bug
 
-| | |
-|---|---|
-| **Síntoma** | Al guardar con "Monto Total" = 0, la app la agrega sin error. |
-| **Esperado** | Rechazar con *"El monto total debe ser mayor que cero"*. |
-| **Causa raíz** | `InvoiceValidator.Validar` usa `< 0` en lugar de `<= 0`. |
-| **Severidad** | Media (datos inconsistentes). |
+
+|                |                                                               |
+| -------------- | ------------------------------------------------------------- |
+| **Síntoma**    | Al guardar con "Monto Total" = 0, la app la agrega sin error. |
+| **Esperado**   | Rechazar con *"El monto total debe ser mayor que cero"*.      |
+| **Causa raíz** | `InvoiceValidator.Validar` usa `< 0` en lugar de `<= 0`.      |
+| **Severidad**  | Media (datos inconsistentes).                                 |
+
 
 ### Criterio de "hecho"
+
 - Bug reproducido en pantalla. **A partir de aquí empieza la grabación del video.**
 
 ---
@@ -381,6 +390,7 @@ Crear el Issue en GitHub → **New Issue**:
 - Labels: `bug`, `validation`.
 
 ### Criterio de "hecho"
+
 - Repo visible en GitHub con todo el código.
 - Issue #1 creado.
 
@@ -393,19 +403,17 @@ Crear el Issue en GitHub → **New Issue**:
 ### Pasos
 
 1. ```powershell
-   git checkout -b fix/issue-1-monto-cero
+  git checkout -b fix/issue-1-monto-cero
    ```
-
 2. Editar `Services/InvoiceValidator.cs`:
-   ```diff
+  ```diff
    - if (f.MontoTotal < 0)
    -     return (false, "El monto total no puede ser negativo.");
    + if (f.MontoTotal <= 0)
    +     return (false, "El monto total debe ser mayor que cero.");
-   ```
-
+  ```
 3. Agregar a `InvoiceValidatorTests.cs`:
-   ```csharp
+  ```csharp
    [Fact]
    public void Validar_MontoCero_RetornaInvalida()
    {
@@ -417,15 +425,15 @@ Crear el Issue en GitHub → **New Issue**:
        Assert.False(ok);
        Assert.Equal("El monto total debe ser mayor que cero.", error);
    }
-   ```
-
+  ```
 4. ```powershell
-   dotnet test   # 4/4 passed
+  dotnet test   # 4/4 passed
    ```
 
 > **Tip TDD para grabar:** primero escribe el test, corre `dotnet test` y muestra que **falla** (rojo), luego aplica el fix y muestra **verde**.
 
 ### Criterio de "hecho"
+
 - Rama creada, archivos modificados, `dotnet test` verde con 4 pruebas.
 
 ---
@@ -437,37 +445,37 @@ Crear el Issue en GitHub → **New Issue**:
 ### Pasos
 
 1. ```powershell
-   git add src/InvoiceRegistry.App/Services/InvoiceValidator.cs `
+  git add src/InvoiceRegistry.App/Services/InvoiceValidator.cs `
            tests/InvoiceRegistry.Tests/InvoiceValidatorTests.cs
    git commit -m "fix: reject invoices with total amount <= 0 (closes #1)"
    git push -u origin fix/issue-1-monto-cero
    ```
-
 2. En GitHub: **Compare & pull request**.
-   - Título: **"Fix #1: rechazar facturas con monto total cero"**.
-   - Cuerpo:
-     ```markdown
-     ## Resumen
-     - Corrige la validación en `InvoiceValidator`: ahora rechaza `MontoTotal <= 0`.
-     - Mensaje de error actualizado a "El monto total debe ser mayor que cero.".
-     - Agrega test `Validar_MontoCero_RetornaInvalida`.
+  - Título: **"Fix #1: rechazar facturas con monto total cero"**.
+  - Cuerpo:
+    ```markdown
+    ## Resumen
+    - Corrige la validación en `InvoiceValidator`: ahora rechaza `MontoTotal <= 0`.
+    - Mensaje de error actualizado a "El monto total debe ser mayor que cero.".
+    - Agrega test `Validar_MontoCero_RetornaInvalida`.
 
-     Closes #1.
+    Closes #1.
 
-     ## Cómo probar
-     1. `dotnet test` → 4/4 verde.
-     2. Ejecutar la app, intentar guardar con monto 0 → debe mostrar el mensaje.
-     ```
-
+    ## Cómo probar
+    ```
+  1. `dotnet test` → 4/4 verde.
+  2. Ejecutar la app, intentar guardar con monto 0 → debe mostrar el mensaje.
+    `
 3. Code review (en el mismo PR, mismo usuario o reviewer):
-   - Pestaña **Files changed** → revisar diff.
-   - Comentario en línea (ej.: *"Buen catch del edge case del cero"*).
-   - **Review → Approve**.
-   - **Merge pull request** (squash merge recomendado).
-   - Verificar que **Issue #1 quedó cerrado automáticamente**.
-   - Borrar la rama remota.
+  - Pestaña **Files changed** → revisar diff.
+  - Comentario en línea (ej.: *"Buen catch del edge case del cero"*).
+  - **Review → Approve**.
+  - **Merge pull request** (squash merge recomendado).
+  - Verificar que **Issue #1 quedó cerrado automáticamente**.
+  - Borrar la rama remota.
 
 ### Criterio de "hecho"
+
 - PR mergeado en `main`.
 - Issue #1 cerrado por el merge.
 - `main` actualizado en local: `git checkout main && git pull`.
@@ -505,17 +513,18 @@ jobs:
 ```
 
 ### Criterio de "hecho"
+
 - En el siguiente PR, aparece el check ✅ *CI / build-test* antes de mergear.
 
 ---
 
 ## Checklist final antes de grabar
 
-- [ ] Fases 0–6 completas (app corre, bug reproducible).
-- [ ] Repo en GitHub creado pero **Issue #1 aún no creado** (lo creas en cámara).
-- [ ] Estás parado en `main` con working tree limpio (`git status`).
-- [ ] Terminal con fuente grande, IDE con tema oscuro a juego con la app.
-- [ ] Cierra apps ruidosas / notificaciones.
+- Fases 0–6 completas (app corre, bug reproducible).
+- Repo en GitHub creado pero **Issue #1 aún no creado** (lo creas en cámara).
+- Estás parado en `main` con working tree limpio (`git status`).
+- Terminal con fuente grande, IDE con tema oscuro a juego con la app.
+- Cierra apps ruidosas / notificaciones.
 
 ## Cheat-sheet de grabación (10 pasos)
 
@@ -529,3 +538,4 @@ jobs:
 8. GitHub → **Compare & pull request** → llenar plantilla → crear PR.
 9. Pestaña *Files changed* → comentario en línea → **Approve**.
 10. **Merge pull request** → confirmar cierre automático del Issue #1.
+
